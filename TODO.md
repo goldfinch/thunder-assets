@@ -13,3 +13,8 @@ Goldfinch\ThunderAssets\Thunder:
     themes/main/src/vue.scss: "[app-form]"
     themes/main/src/vue.js: "[app-form]"
 ```
+
+```js
+window.thunderAssets['vue.scss'] = () => {}
+window.thunderAssets['vue.js'] = () => {}
+```
