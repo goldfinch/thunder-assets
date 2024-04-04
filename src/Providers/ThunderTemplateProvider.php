@@ -27,6 +27,7 @@ class ThunderTemplateProvider implements TemplateGlobalProvider
 
         $return = '';
         $returnAfter = PHP_EOL;
+        $returnBefore = PHP_EOL;
 
         if ($cfg->get('registered_assets') && is_array($cfg->get('registered_assets'))) {
 
@@ -58,11 +59,14 @@ class ThunderTemplateProvider implements TemplateGlobalProvider
             }
         }
 
+        $content = file_get_contents(BASE_PATH .'/'. ModuleResourceLoader::resourcePath('goldfinch/thunder-assets:client/dist/thunder.js'));
+
         if ($return != '') {
-            $return .= '<script data-cfasync="false" src="'.ModuleResourceLoader::resourceURL('goldfinch/thunder-assets:client/dist/thunder.js').'"></script>' . PHP_EOL . '    ';
+            // $return .= '<script data-cfasync="false" src="'.ModuleResourceLoader::resourceURL('goldfinch/thunder-assets:client/dist/thunder.js').'"></script>' . PHP_EOL . '    ';
+            $returnBefore .= '<script data-cfasync="false">'.$content.'</script>' . PHP_EOL . '    ';
             $return .= '<script data-cfasync="false" type="thunder">window.thunder()</script>';
         }
 
-        return $return . $returnAfter;
+        return $returnBefore . $return . $returnAfter;
     }
 }
