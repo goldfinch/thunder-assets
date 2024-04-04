@@ -1,0 +1,7 @@
+{
+  "src/thunder.js": {
+    "file": "thunder.js",
+    "isEntry": true,
+    "src": "src/thunder.js"
+  }
+}

@@ -1,0 +1,34 @@
+{
+    "name": "goldfinch/thunder-assets",
+    "description": "Lazy loading assets SilverStripe",
+    "type": "silverstripe-vendormodule",
+    "keywords": [
+        "silverstripe",
+        "lazy-loading",
+        "lazyloading",
+        "assets"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Art Karasev",
+            "email": "art.karasev@proton.me"
+        }
+    ],
+    "require": {
+        "php": ">=8.0",
+        "silverstripe/framework": "^5.0",
+        "silverstripe/admin": "^2.0",
+        "swordfox/vite": "^3.0"
+    },
+    "extra": {
+        "expose": ["client/dist"]
+    },
+    "autoload": {
+        "psr-4": {
+            "Goldfinch\\ThunderAssets\\": "src/"
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
