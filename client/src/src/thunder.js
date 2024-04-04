@@ -4,49 +4,74 @@ Defer.lazy = true;
 Defer.all('script[type="thunder"]');
 
 window.thunderAssets = [];
-window.thunderAssetsCalled = false;
+window.thunderAssetsCalled = [];
 
 var pastThunders = [];
+
+function detectAndCallThunderAssets(link) {
+
+  let kname = link.split('.');
+  let kformat = link.split('.');
+
+  if (kname && kname.length) {
+    kname = kname[0].split('/')
+
+    if (kname) {
+
+      kname = kname.splice(-1)
+
+      if (kname && kname.length) {
+
+        kname = kname[0].split('-')
+
+        if (kname && kname.length) {
+          kname = kname[0]
+        }
+      }
+    }
+  }
+
+  if (kformat && kformat.length) {
+    kformat = kformat[1]
+  }
+
+  if (kname && kformat) {
+    let kk = kname + '.' + kformat;
+    let callback = window.thunderAssets[kk];
+
+    if (typeof callback === 'function') {
+
+      if (!window.thunderAssetsCalled[kk] && window.thunderAssets) {
+        eval('callback()')
+        window.thunderAssetsCalled[kk] = true
+      }
+    }
+  }
+}
 
 function thunderStrike(link) {
 
   if (link && !pastThunders.includes(link)) {
+
     let type = link.split('.').pop();
+
     if (type == 'js') {
       let script = document.createElement('script');
       script.src = link;
       script.type = 'module';
-      script.onload = () => {
 
-        if (!window.thunderAssetsCalled && window.onThunderAssets) {
-          window.onThunderAssets()
-          window.thunderAssetsCalled = true
-        }
+      script.onload = () => detectAndCallThunderAssets(link)
 
-        // let l = link.split('.')
-
-        // console.log(l[0].split('/').splice(-1)[0].split('-')[0])
-
-        // console.log(link.split('.')[1])
-        // // text.match("word1(.*)Word2")[1];
-
-      };
       document.documentElement.firstChild.appendChild(script);
       pastThunders.push(link)
-    } else if (type == 'css') {
+
+    } else if (type == 'css' || type == 'scss' || type == 'sass' || type == 'less') {
       let stylesheet = document.createElement('link');
       stylesheet.rel = 'stylesheet';
       stylesheet.href = link;
-      stylesheet.onload = () => {
 
-        if (!window.thunderAssetsCalled && window.onThunderAssets) {
-          window.onThunderAssets()
-          window.thunderAssetsCalled = true
-        }
+      stylesheet.onload = () => detectAndCallThunderAssets(link);
 
-        // console.log('loaded', link, 1)
-
-      };
       document.documentElement.firstChild.appendChild(stylesheet);
       pastThunders.push(link)
     }
