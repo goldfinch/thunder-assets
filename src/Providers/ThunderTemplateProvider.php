@@ -5,6 +5,7 @@ namespace Goldfinch\ThunderAssets\Providers;
 use Swordfox\Vite\Helpers\Vite;
 use Goldfinch\ThunderAssets\Thunder;
 use SilverStripe\View\TemplateGlobalProvider;
+use SilverStripe\Core\Manifest\ModuleResourceLoader;
 
 class ThunderTemplateProvider implements TemplateGlobalProvider
 {
@@ -58,7 +59,7 @@ class ThunderTemplateProvider implements TemplateGlobalProvider
         }
 
         if ($return != '') {
-            $return .= '<script src="'.$vite->assetLink('themes/main/src/thunder.js').'"></script>' . PHP_EOL . '    ';
+            $return .= '<script src="'.ModuleResourceLoader::resourceURL('goldfinch/thunder-assets:client/dist/thunder.js').'"></script>' . PHP_EOL . '    ';
             $return .= '<script type="thunder">window.thunder()</script>';
         }
 

@@ -4,6 +4,7 @@ Defer.lazy = true;
 Defer.all('script[type="thunder"]');
 
 window.thunderAssets = [];
+window.thunderAssetsCalled = false;
 
 var pastThunders = [];
 
@@ -15,14 +16,37 @@ function thunderStrike(link) {
       let script = document.createElement('script');
       script.src = link;
       script.type = 'module';
-      script.onload = () => {console.log('loaded', link)};
+      script.onload = () => {
+
+        if (!window.thunderAssetsCalled && window.onThunderAssets) {
+          window.onThunderAssets()
+          window.thunderAssetsCalled = true
+        }
+
+        // let l = link.split('.')
+
+        // console.log(l[0].split('/').splice(-1)[0].split('-')[0])
+
+        // console.log(link.split('.')[1])
+        // // text.match("word1(.*)Word2")[1];
+
+      };
       document.documentElement.firstChild.appendChild(script);
       pastThunders.push(link)
     } else if (type == 'css') {
       let stylesheet = document.createElement('link');
       stylesheet.rel = 'stylesheet';
       stylesheet.href = link;
-      stylesheet.onload = () => {console.log('loaded', link)};
+      stylesheet.onload = () => {
+
+        if (!window.thunderAssetsCalled && window.onThunderAssets) {
+          window.onThunderAssets()
+          window.thunderAssetsCalled = true
+        }
+
+        // console.log('loaded', link, 1)
+
+      };
       document.documentElement.firstChild.appendChild(stylesheet);
       pastThunders.push(link)
     }
