@@ -65,6 +65,10 @@ class ThunderTemplateProvider implements TemplateGlobalProvider
             // $return .= '<script data-cfasync="false" src="'.ModuleResourceLoader::resourceURL('goldfinch/thunder-assets:client/dist/thunder.js').'"></script>' . PHP_EOL . '    ';
             $return .= '<script data-cfasync="false">'.$content.'</script>' . PHP_EOL . '    ';
             $return .= '<script data-cfasync="false" type="thunder">window.thunder()</script>';
+
+            if ($cfg->get('registered_font')) {
+          	    $return .= '<link data-cfasync="false" rel="preload" as="style" href="'.$cfg->get('registered_font').'" fetchpriority="low" onload="this.rel=\'stylesheet\'">';
+            }
         }
 
         return $returnBefore . $return . $returnAfter;
