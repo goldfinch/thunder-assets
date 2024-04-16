@@ -3,7 +3,7 @@
 
 Defer.lazy = true;
 Defer.all('script[type="thunder"]');
-Defer.all('script[type="thunder-strike"]', 0, false);
+Defer.all('script[type="thunder-strike"]', 250, false);
 
 window.thunderAssets = [];
 window.thunderAssetsCalled = [];
