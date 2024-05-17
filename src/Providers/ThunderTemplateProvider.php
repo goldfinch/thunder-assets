@@ -41,6 +41,8 @@ class ThunderTemplateProvider implements TemplateGlobalProvider
                     $type = 'css';
                 } else if (strpos($format, '.js') !== false) {
                     $type = 'js';
+                } else if (strpos($format, '.ts') !== false) {
+                    $type = 'js';
                 }
 
                 if ($type) {
