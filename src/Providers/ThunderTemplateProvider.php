@@ -2,10 +2,10 @@
 
 namespace Goldfinch\ThunderAssets\Providers;
 
-use Swordfox\Vite\Helpers\Vite;
 use Goldfinch\ThunderAssets\Thunder;
-use SilverStripe\View\TemplateGlobalProvider;
 use SilverStripe\Core\Manifest\ModuleResourceLoader;
+use SilverStripe\View\TemplateGlobalProvider;
+use Swordfox\Vite\Helpers\Vite;
 
 class ThunderTemplateProvider implements TemplateGlobalProvider
 {
@@ -14,8 +14,8 @@ class ThunderTemplateProvider implements TemplateGlobalProvider
         return [
             'ThunderAssets' => [
                 'method' => 'ThunderAssets',
-                'casting' => 'HTMLFragment'
-            ]
+                'casting' => 'HTMLFragment',
+            ],
         ];
     }
 
@@ -37,11 +37,11 @@ class ThunderTemplateProvider implements TemplateGlobalProvider
 
                 if (strpos($format, '.scss') !== false) {
                     $type = 'css';
-                } else if (strpos($format, '.css') !== false) {
+                } elseif (strpos($format, '.css') !== false) {
                     $type = 'css';
-                } else if (strpos($format, '.js') !== false) {
+                } elseif (strpos($format, '.js') !== false) {
                     $type = 'js';
-                } else if (strpos($format, '.ts') !== false) {
+                } elseif (strpos($format, '.ts') !== false) {
                     $type = 'js';
                 }
 
@@ -50,29 +50,36 @@ class ThunderTemplateProvider implements TemplateGlobalProvider
                     if ($rule === true) {
 
                         if ($type == 'css') {
-                            $return .= $vite->CSS($asset) . PHP_EOL . '    ';
+                            $return .= $vite->CSS($asset).PHP_EOL.'    ';
                         } else {
-                            $return .= $vite->JS($asset) . PHP_EOL . '    ';
+                            $return .= $vite->JS($asset).PHP_EOL.'    ';
                         }
                     } else {
-                        $return .= '<meta name="thunder-asset" content="'.$vite->assetLink($asset).'" cloud="'.$rule.'">' . PHP_EOL . '    ';
+                        $return .= '<meta name="thunder-asset" content="'.$vite->assetLink($asset).'" cloud="'.$rule.'">'.PHP_EOL.'    ';
                     }
                 }
             }
         }
 
-        $content = file_get_contents(BASE_PATH .'/'. ModuleResourceLoader::resourcePath('goldfinch/thunder-assets:client/dist/thunder.js'));
+        $content = file_get_contents(BASE_PATH.'/'.ModuleResourceLoader::resourcePath('goldfinch/thunder-assets:client/dist/thunder.js'));
 
         if ($return != '') {
             // $return .= '<script data-cfasync="false" src="'.ModuleResourceLoader::resourceURL('goldfinch/thunder-assets:client/dist/thunder.js').'"></script>' . PHP_EOL . '    ';
-            $return .= '<script data-cfasync="false">'.$content.'</script>' . PHP_EOL . '    ';
+            $return .= '<script data-cfasync="false">'.$content.'</script>'.PHP_EOL.'    ';
             $return .= '<script data-cfasync="false" type="thunder">window.thunder()</script>';
 
             if ($cfg->get('registered_font')) {
-          	    $return .= '<link data-cfasync="false" rel="preload" as="style" href="'.$cfg->get('registered_font').'" fetchpriority="low" onload="this.rel=\'stylesheet\'">';
+
+                if (substr($cfg->get('registered_font'), 0, 4) === 'http') {
+                    $fontUrl = $cfg->get('registered_font');
+                } else {
+                    $fontUrl = $vite->assetLink($cfg->get('registered_font'));
+                }
+
+                $return .= '<link data-cfasync="false" rel="preload" as="style" href="'.$fontUrl.'" fetchpriority="low" onload="this.rel=\'stylesheet\'">';
             }
         }
 
-        return $returnBefore . $return . $returnAfter;
+        return $returnBefore.$return.$returnAfter;
     }
 }
